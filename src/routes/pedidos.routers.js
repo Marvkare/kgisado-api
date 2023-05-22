@@ -9,11 +9,11 @@ import {
 
 const router = Router()
 
-router.get("pedidos/", obtenerPedido)
+router.get("pedido/", obtenerPedido)
 router.get("pedidos/:idPedido", obtenerPedidos)
-router.put("pedidos/", nuevoPedido)
-router.patch("pedidos/:idPedido", editarPedido)
-router.delete("pedidos/:idPedido", eliminarPedido)
+router.post("/pedido/", nuevoPedido)
+router.patch("pedido/:idPedido", editarPedido)
+router.delete("pedido/:idPedido", eliminarPedido)
 
 
 export default router;

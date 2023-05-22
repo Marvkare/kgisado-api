@@ -31,6 +31,7 @@ export const agregarProveedor = async (req, res) =>{
     try {
         //obtenemos datos
         const {Nombre, Apellido, Direccion, Proveedorescol, NumTelefono, NombreUsuario, Contrasena} = req.body
+        console.log(req.body)
         const salt =  await bcrypt.genSalt(10);
         const ContraseñaEncriptada = await bcrypt.hash(Contrasena, salt)
         

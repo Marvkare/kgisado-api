@@ -29,11 +29,16 @@ export const getPlatillo = async (req, res)=>{
 
 export const agregarPlatillo = async (req, res)=>{
     try {
-        const {Platillo, Descripcion, Imagen, Horarios, Costos, Direccion, Calificacion} = req.body
+        const {Platillo, Descripcion, Imagen, Horarios, Costos, Direccion, Calificacion, idProveedor} = req.body
         const [rows] = await pool.query(
             "INSERT INTO platillos (Platillo, Descripcion, Imagen, Horarios, Costos, Direccion, Calificacion)   VALUES(?,?,?,?,?,?,?)",
             [Platillo, Descripcion, Imagen, Horarios, Costos, Direccion,Calificacion]
         )
+        const [plati] = await pool.query(
+            "INSERT INTO proveedores_has_platillos (Proveedores_idProveedores, Platillos_idPlatillos) VALUES(?,?) ",
+            [idProveedor, rows.insertId]
+        )   
+        
         res.status(201).json({idPlatillo: rows.insertId, Platillo, Descripcion, Imagen, Horarios, Costos, Direccion, Calificacion})
     } catch (error) {
         res.status(500).json({message:"Hubo un error",error})

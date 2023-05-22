@@ -1,7 +1,6 @@
 import { Router } from "express";
 import {
     inicioSesion,
-    registrarUsuario,
     obtenerUsuario,
     cerrarSesion
 } from "../controllers/auth.controller.js"
@@ -9,7 +8,7 @@ import {
 const router = Router()
 
 router.post("/inicioSesion", inicioSesion);
-router.post("/registrarUsuario", registrarUsuario);
+//router.post("/registrarUsuario", registrarUsuario);
 router.get("/miusuario", obtenerUsuario);
 router.get("/cerrarSesion", cerrarSesion)
 

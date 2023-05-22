@@ -1,6 +1,7 @@
 import express from "express";
 import morgan from "morgan";
-
+import exphdbs from "express-handlebars"
+import path from "path"
 import employeesRoutes from "./routes/employees.routes.js";
 import indexRoutes from "./routes/index.routes.js";
 import compradoresRoutes from "./routes/compradores.routes.js"
@@ -25,6 +26,8 @@ app.use("/api", platillosRouters);
 app.use("/api", proveedoresRouters)
 app.use("/api", pedidosRouters);
 app.use("./api", auth)
+
+
 
 app.use((req, res, next) => {
   res.status(404).json({ message: "Not found" });

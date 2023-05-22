@@ -31,13 +31,22 @@ export const obtenerPedido = async (req, res) =>{
 
 export const nuevoPedido = async (req, res) => {
 try {
-   const {Platillo, Descripcion, Imagen, Horarios, Costos, Direccion, idCompradores, idPlatillos} = req.body;
+   const {idPlatillo, CostoDeEnvio, DireccionEntrega, DescripcionDeEnvio, TipoDePago_idTipoDePago, idCompradores, idPlatillos} = req.body;
    "Agregar idCompradores idplatillos idRepartidorR en la tabla pedidos"
    const [rows] = await  pool.query(
-    "INSERT INTO Pedidos (CostoDeEnvio, DireccionEntrega, DescripcionDeEnvio,idCompradoresC,idPlatillosPL,idTipoDePago,idRepartidorR) VALUES (?,?,?,?,?,?,?) ",
-    [Platillo, Descripcion, Imagen, Horarios, Costos, Direccion, idCompradores, idPlatillos]
+    "INSERT INTO Pedidos (CostoDeEnvio, DireccionEntrega, DescripcionDeEnvio, TipoDePago_idTipoDePago) VALUES (?,?,?,?) ",
+    [CostoDeEnvio, DireccionEntrega, DescripcionDeEnvio, TipoDePago_idTipoDePago]
    )  
-  res.status(202).json({idPedido : rows.insertId,Platillo, Descripcion, Imagen, Horarios, Costos, Direccion, idCompradores, idPlatillos })
+   console.log(rows)
+   const [rows2] = await pool.query(
+    "INSERT INTO platillos_has_pedidos (Platillos_idPlatillos, Pedidos_idPedidos) VALUES (?,?)",
+    [idPlatillo, rows.insertId]
+   )
+   const [rows3] = await pool.query(
+    "INSERT INTO  compradores_has_pedidos (Compradores_idCompradores,Pedidos_idPedidos) VALUES(?,?)",
+    [idCompradores, rows.insertId]
+   )
+  res.status(202).json({idPedido : rows.insertId,idPlatillo, Descripcion, Imagen, Horarios, Costos, Direccion, idCompradores, idPlatillos })
 } catch (error) {
   res.status(500).json({message:"error"+ error})   
 }
