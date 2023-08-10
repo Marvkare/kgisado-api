@@ -1,7 +1,8 @@
 import {pool} from "../db.js"
 import  jwt  from "jsonwebtoken"
 import bcrypt from"bcryptjs"
-
+import {conf} from "../config.js"
+import {verifyToken} from "./auth/verifyToken.js"
 export const getProveedores = async(req, res) =>{
     try {
         const [rows] = await pool.query("SELECT * FROM proveedores")
@@ -39,9 +40,13 @@ export const agregarProveedor = async (req, res) =>{
             "INSERT INTO proveedores (Nombre, Apellido, Direccion, Proveedorescol, NumTelefono, NombreUsuario, Contrasena) VALUES(?,?,?,?,?,?,?) ",
             [Nombre, Apellido, Direccion, Proveedorescol, NumTelefono, NombreUsuario, ContraseñaEncriptada]) 
 
-        res.status(201).json({idProveedor: rows.insertedId, Nombre, Apellido, Direccion, Proveedorescol, NumTelefono, NombreUsuario, ContraseñaEncriptada})
+        const token = jwt.sign({ id: rows.insertId }, conf.secret, {
+            expiresIn: 60 * 60 * 24
+        })
+        
+        res.status(201).json({idProveedor: rows.insertedId, Nombre, Apellido, Direccion, Proveedorescol, NumTelefono, NombreUsuario, ContraseñaEncriptada, token})
 
-    } catch (error) {
+    }catch (error) {
         return res.status(500).json({message:"Ocurrio un error"+ error})        
     }
 }
@@ -82,6 +87,27 @@ export const eliminarProveedor = async(req, res) =>{
     }
 }
 
-const encryptPassword = async (password) =>{
-    
+export const inicioSesionProveedor = async(req, res)=>{
+    const {NombreUsuario, Contrasena} = req.body;
+    //ver si el usuario esta en nuestra base de datos
+    const user = await pool.query("SELECT * FROM proveedores WHERE NombreUsuario = ?",
+    [NombreUsuario])
+    const userData = user[0]
+    console.log(userData[0].Contrasena)
+    const match = await bcrypt.compare(Contrasena, userData[0].Contrasena);
+    console.log(match)
+    if(!match) {
+        res.status(401).send({ auth: false, token: null });
+        return res.status(404).send("Tu contraseña no es correcta")
+    }
+    if (!user) {
+        return res.status(404).send("Su nombre de usuario no existe");
+    }
+  //validamos la contraseña
+
+  console.log(conf)
+  const token = jwt.sign({ id: userData[0].Contrasena}, conf.secretProveedores, {
+    expiresIn: 60 * 60 * 24,
+  });
+  res.status(200).json({ auth: true, token });
 }

@@ -8,7 +8,7 @@ import {
     deleteComprador
 
 } from "../controllers/compradores.controller.js"
-
+import { verifyToken } from "../controllers/auth/verifyToken.js";
 const router = Router();
 
 router.get("/compradores", getCompradores);

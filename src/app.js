@@ -10,12 +10,15 @@ import platillosRouters from  "./routes/platillos.routers.js"
 import proveedoresRouters from "./routes/proveedores.router.js"
 import pedidosRouters from "./routes/pedidos.routers.js"
 import auth from "./routes/auth.routes.js"
-
+import cors from "cors"
 const app = express();
 
 // Middlewares
+app.use(cors())
 app.use(morgan("dev"));
 app.use(express.json());
+
+//lista de direcciones a las que pueden acceder
 
 // Routes
 app.use("/", indexRoutes);
@@ -25,7 +28,7 @@ app.use("/api", repartidoresRouters)
 app.use("/api", platillosRouters);
 app.use("/api", proveedoresRouters)
 app.use("/api", pedidosRouters);
-app.use("./api", auth)
+app.use("/api", auth)
 
 
 

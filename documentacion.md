@@ -11,7 +11,7 @@ Endpoint o rutas
 
 ## Cliente res
 extencion vscode thunder cliente
-
+ip:/api/
 
 rutas Compradores
 get /compradores Nos muestra una lita de compradores
@@ -27,3 +27,15 @@ rutas Platillos
 Para poder agregar un platillo necesitamos tener un usuario y tener
 un token de autenticacion, y este lo obtenemos en la ruta login una ves 
 teniendo el token el toque lo enviamos a traves del objeto req.body
+
+
+Rutas proveedores
+
+http://localhost:3000/api/proveedores/
+get /proveedores      Ver proveedores registrados 
+post /proveedores/login  inicio de sesion 
+/proveedores/:idProveedores 
+/proveedores
+/proveedores/:idProveedores
+/proveedores/:idProveedores
+/inicio-session-proveedor

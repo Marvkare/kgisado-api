@@ -4,15 +4,18 @@ import {
     getProveedor,
     agregarProveedor,
     actualizarProveedor,
-    eliminarProveedor
+    eliminarProveedor,
+    inicioSesionProveedor
 } from "../controllers/proveedores.controllers.js";
 const router = Router()
+import { verifyToken } from "../controllers/auth/verifyToken.js";
 
-router.get("/proveedores", getProveedores);
-router.get("/proveedores/:idProveedores", getProveedor);
+router.get("/proveedores", verifyToken, getProveedores);
+router.post("/proveedores/login", inicioSesionProveedor)
+router.get("/proveedores/:idProveedor",verifyToken, getProveedor);
 router.post("/proveedores", agregarProveedor);
-router.patch("/proveedores/:idProveedores", actualizarProveedor);
-router.delete("/proveedores/:idProveedores", eliminarProveedor);
-router.get("/inicionsesionProveedor")
+router.patch("/proveedores/:idProveedor", verifyToken, actualizarProveedor);
+router.delete("/proveedores/:idProveedor", verifyToken, eliminarProveedor);
+router.post("/inicio-session-proveedor", inicioSesionProveedor)
 
 export default router;

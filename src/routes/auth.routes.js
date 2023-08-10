@@ -1,15 +1,17 @@
 import { Router } from "express";
 import {
-    inicioSesion,
-    obtenerUsuario,
-    cerrarSesion
-} from "../controllers/auth.controller.js"
+  signinController,
+  signupController,
+  logout,
+} from "../controllers/auth/authController.js";
+import { verifyToken } from "../controllers/auth/verifyToken.js";
 
-const router = Router()
+const router = Router();
 
-router.post("/inicioSesion", inicioSesion);
-//router.post("/registrarUsuario", registrarUsuario);
-router.get("/miusuario", obtenerUsuario);
-router.get("/cerrarSesion", cerrarSesion)
+router.post("/signup", signupController);
+
+router.post("/signin", signinController);
+
+router.get("/logout", logout);
 
 export default router;
