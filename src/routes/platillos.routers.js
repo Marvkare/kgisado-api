@@ -6,13 +6,13 @@ import {
     acutalizarPlatillo,
     deletePlatillo
 } from "../controllers/platillos.controllers.js"
-
+import { verifyToken, esProveedor, esAdministrador} from "../controllers/auth/verifyToken.js";
 const router = Router()
 
-router.get("/platillos/", getPlatillos);
-router.get("/platillos/:idPlatillo", getPlatillo);
-router.post("/platillos/", agregarPlatillo);
-router.patch("/platillos/:idPlatillo", acutalizarPlatillo);
-router.delete("/platillos/:idPlatillo", deletePlatillo)
+router.get("/platillos/", [verifyToken, esAdministrador], getPlatillos);
+router.get("/platillos/:idPlatillo",[verifyToken, esProveedor], getPlatillo);
+router.post("/platillos/", [verifyToken, esProveedor],agregarPlatillo);
+router.patch("/platillos/:idPlatillo", [verifyToken, esProveedor] ,acutalizarPlatillo);
+router.delete("/platillos/:idPlatillo", [verifyToken, esProveedor], deletePlatillo)
 
 export default router;

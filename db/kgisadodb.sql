@@ -2,20 +2,35 @@ CREATE DATABASE IF NOT EXISTS kgisadodb
 SHOW DATABASES
 USE  kgisadodb
 
-CREATE TABLE IF NOT EXISTS `kgisadodb`.`Proveedores_has_Platillos` (
-  `Proveedores_idProveedores` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `kgisadodb`.`Usuario_has_Platillos` (
+  `Usuario_idUsuario` INT NOT NULL,
   `Platillos_idPlatillos` INT NOT NULL,
-  PRIMARY KEY (`Proveedores_idProveedores`, `Platillos_idPlatillos`),
-  INDEX `fk_Proveedores_has_Platillos_Platillos1_idx` (`Platillos_idPlatillos` ASC) VISIBLE,
-  INDEX `fk_Proveedores_has_Platillos_Proveedores1_idx` (`Proveedores_idProveedores` ASC) VISIBLE,
-  CONSTRAINT `fk_Proveedores_has_Platillos_Proveedores1`
-    FOREIGN KEY (`Proveedores_idProveedores`)
-    REFERENCES `kgisadodb`.`Proveedores` (`idProveedores`)
+  PRIMARY KEY (`Usuario_idUsuario`, `Platillos_idPlatillos`),
+  INDEX `fk_Usuario_has_Platillos_Platillos1_idx` (`Platillos_idPlatillos` ASC) VISIBLE,
+  INDEX `fk_Usuario_has_Platillos_Usuario1_idx` (`Usuario_idUsuario` ASC) VISIBLE,
+  CONSTRAINT `fk_Usuario_has_Platillos_Usuario1`
+    FOREIGN KEY (`Usuario_idUsuario`)
+    REFERENCES `kgisadodb`.`Usuario` (`idUsuario`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Proveedores_has_Platillos_Platillos1`
+  CONSTRAINT `fk_Usuario_has_Platillos_Platillos1`
     FOREIGN KEY (`Platillos_idPlatillos`)
     REFERENCES `kgisadodb`.`Platillos` (`idPlatillos`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
+ENGINE = InnoDB
+
+INSERT INTO rol (idRol, Nombre) VALUES(0, "Administrador"), (1, "Comprador"),(2, "Proveedor"),(3, "Repartidor");
+
+
+CREATE TABLE IF NOT EXISTS `kgisadodb`.`Usuario_has_Platillos`(
+
+);
+
+CREATE TABLE IF NOT EXISTS `kgisadodb`.`Rol` (
+  `idRol` INT NOT NULL,
+  `Nombre` VARCHAR(45) NULL,
+  PRIMARY KEY (`idRol`),
+  UNIQUE INDEX `idRol_UNIQUE` (`idRol` ASC) VISIBLE,
+  UNIQUE INDEX `Name_UNIQUE` (`Nombre` ASC) VISIBLE)
 ENGINE = InnoDB

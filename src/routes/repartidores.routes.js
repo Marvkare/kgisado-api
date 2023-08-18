@@ -6,7 +6,7 @@ agregarRepartidor,
 deleteRepartidor,
 updateRepartidor
 }from '../controllers/repartidores.controllers.js'
-
+import { verifyToken,esProveedor } from "../controllers/auth/verifyToken.js";
 const router = Router();
 
 router.get("/repartidores/",getRepartidores);

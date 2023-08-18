@@ -7,4 +7,4 @@ export const DB_USER = process.env.DB_USER || "root";
 export const DB_PASSWORD = process.env.DB_PASSWORD || "Pescado1";
 export const DB_DATABASE = process.env.DB_DATABASE || "kgisadodb";
 export const DB_PORT = process.env.DB_PORT || 3307;
-export const conf = {secretProveedores: "una iguana"}
+export const conf = {secretUsuario: "una iguana"}

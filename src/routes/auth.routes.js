@@ -4,11 +4,11 @@ import {
   signupController,
   logout,
 } from "../controllers/auth/authController.js";
-import { verifyToken } from "../controllers/auth/verifyToken.js";
+import { verifyToken, esProveedor } from "../controllers/auth/verifyToken.js";
 
 const router = Router();
-
-router.post("/signup", signupController);
+//La ruta de platillos solo puede ser accesda por proveedores
+router.post("/signup",[verifyToken], signupController);
 
 router.post("/signin", signinController);
 

@@ -35,7 +35,7 @@ export const agregarPlatillo = async (req, res)=>{
             [Platillo, Descripcion, Imagen, Horarios, Costos, Direccion,Calificacion]
         )
         const [plati] = await pool.query(
-            "INSERT INTO proveedores_has_platillos (Proveedores_idProveedores, Platillos_idPlatillos) VALUES(?,?) ",
+            "INSERT INTO Usuario_has_platillos (Usuario_idUsuario, Platillos_idPlatillos) VALUES(?,?) ",
             [idProveedor, rows.insertId]
         )   
         
