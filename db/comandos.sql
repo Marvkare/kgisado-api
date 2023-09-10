@@ -31,3 +31,5 @@ DESCRIBE Compradores
 
 /*Eliminar tabla*/
 DROP TABLE Compradores
+
+dro
