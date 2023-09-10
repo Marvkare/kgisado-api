@@ -1,7 +1,7 @@
 import express from "express";
 import morgan from "morgan";
-import exphdbs from "express-handlebars"
-import path from "path"
+import fileUpload from 'express-fileupload'
+import path from "path";
 import employeesRoutes from "./routes/employees.routes.js";
 import indexRoutes from "./routes/index.routes.js";
 //import compradoresRoutes from "./routes/compradores.routes.js"
@@ -11,15 +11,20 @@ import usuarioRouters from "./routes/usuario.router.js"
 import pedidosRouters from "./routes/pedidos.routers.js"
 import auth from "./routes/auth.routes.js"
 import cors from "cors"
+import fileDirname from './file-dir-name.js'
+const { __dirname, __filename } = fileDirname(import.meta);
 const app = express();
 
 // Middlewares
 app.use(cors())
 app.use(morgan("dev"));
 app.use(express.json());
-
+app.use(fileUpload({
+    useTempFiles : true,
+    tempFileDir : './src/uploads'
+}));
 //lista de direcciones a las que pueden acceder
-
+app.use('/images', express.static(path.join(__dirname, 'uploads')));
 // Routes
 app.use("/", indexRoutes);
 app.use("/api", employeesRoutes);

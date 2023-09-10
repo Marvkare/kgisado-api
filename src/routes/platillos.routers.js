@@ -9,7 +9,7 @@ import {
 import { verifyToken, esProveedor, esAdministrador} from "../controllers/auth/verifyToken.js";
 const router = Router()
 
-router.get("/platillos/", [verifyToken, esAdministrador], getPlatillos);
+router.get("/platillos/", [ ], getPlatillos);
 router.get("/platillos/:idPlatillo",[verifyToken, esProveedor], getPlatillo);
 router.post("/platillos/", [verifyToken, esProveedor],agregarPlatillo);
 router.patch("/platillos/:idPlatillo", [verifyToken, esProveedor] ,acutalizarPlatillo);

@@ -38,7 +38,7 @@ export const agregarUsuario = async (req, res) =>{
         
         const [rows] = await pool.query(
             "INSERT INTO Usuario (Nombre, Apellido, Direccion, UsuarioCol, NumTelefono, NombreUsuario, Contrasena, Rol_idRol) VALUES(?,?,?,?,?,?,?,?) ",
-            [Nombre, Apellido, Direccion, Usuariocol, NumTelefono, NombreUsuario, ContraseñaEncriptada, Rol_idRol]) 
+            [Nombre, Apellido, Direccion, Usuariocol, NumTelefono, NombreUsuario, ContraseñaEncriptada, parseInt(Rol_idRol)]) 
 
         const token = jwt.sign({ id: rows.insertId }, conf.secretUsuario, {
             expiresIn: 60 * 60 * 24
@@ -92,10 +92,12 @@ export const inicioSesionUsuario = async(req, res)=>{
     try {
     const {NombreUsuario, Contrasena} = req.body;
     //ver si el Usuario esta en nuestra base de datos
+    console.log(NombreUsuario)
     const [row] = await pool.query("SELECT * FROM Usuario WHERE NombreUsuario = ?",
     [NombreUsuario])
+    console.log(row.length)
     const userData = row[0]
-    if (row==[]) {
+    if (row.length==0) {
         return res.status(404).send("Su nombre de Usuario no existe");
     }
     const match = await bcrypt.compare(Contrasena, userData.Contrasena);
@@ -107,7 +109,7 @@ export const inicioSesionUsuario = async(req, res)=>{
     
   //validamos la contraseña
 
-  const token =  jwt.sign({ id: userData.idUsuario, rol: userData.Rol_idRol }, conf.secretUsuario, {
+    const token =  jwt.sign({ id: userData.idUsuario, rol: userData.Rol_idRol }, conf.secretUsuario, {
     expiresIn: 60 * 60 * 24,
   });
   

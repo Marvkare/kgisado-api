@@ -41,6 +41,7 @@ export const esAdministrador = async (req, res, next) => {
     const [rol]  = await pool.query("SELECT * FROM Rol")
     console.log(decoded)
     console.log(rol.length)
+    
      for (let i = 0; i < rol.length; i++) {
       if (decoded.rol === 0 ) {
         next();

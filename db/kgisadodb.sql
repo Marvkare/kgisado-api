@@ -34,3 +34,9 @@ CREATE TABLE IF NOT EXISTS `kgisadodb`.`Rol` (
   UNIQUE INDEX `idRol_UNIQUE` (`idRol` ASC) VISIBLE,
   UNIQUE INDEX `Name_UNIQUE` (`Nombre` ASC) VISIBLE)
 ENGINE = InnoDB
+
+
+
+
+insert into alumno (Numerocontrol, Nombre, Apellido, Fecha, Telefono, Direccion) 
+values(211150148,"Miguel","Reyes","28/02/1998","7731756740", "Federico engels");

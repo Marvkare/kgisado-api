@@ -8,8 +8,8 @@ SHOW DATABASES
 USE  kgisadodb
 
 /*Crear una tabla si no existe*/
-CREATE TABLE IF NOT EXISTS `kgisadodb`.`Compradores` (
-  `idCompradores` INT NOT NULL,
+CREATE TABLE `Compradores` (
+  `idCompradores ` INT NOT NULL,
   `PrimerNombre` VARCHAR(45) NOT NULL,
   `SegundoNombre` VARCHAR(45) NOT NULL,
   `PrimerApellido` VARCHAR(45) NOT NULL,

@@ -1,4 +1,9 @@
 import {pool} from '../db.js'
+import fs from 'fs-extra'
+import {v4 as uuid} from 'uuid'
+import jwt from 'jsonwebtoken'
+import { conf , online} from '../config.js'
+import {uploadImage} from '../utils/cloudinary.js'
 
 export const getPlatillos = async (req, res)=>{
     try {
@@ -27,21 +32,60 @@ export const getPlatillo = async (req, res)=>{
     }
 }
 
+
 export const agregarPlatillo = async (req, res)=>{
     try {
-        const {Platillo, Descripcion, Imagen, Horarios, Costos, Direccion, Calificacion, idProveedor} = req.body
+        let Imagen =""
+        const token  = req.headers['x-access-token']
+        const decoded = jwt.verify(token, conf.secretUsuario, (err,decoded,req)=>{
+            if(err){
+            return res.status(200).json(err)
+        }
+        
+        return decoded
+        }); 
+        if(await online()){
+            if(req.files?.Imagen){
+                
+                const result = await uploadImage(req.files.Imagen.tempFilePath)
+                console.log(result)
+                console.log(req.files.Imagen.tempFilePath)
+                Imagen = result.secure_url
+                await fs.unlink(req.files.Imagen.tempFilePath)      
+            }
+        }else{
+            console.log(req.files.Imagen)
+            console.log("recursos sin linea")
+            const oldPath = req.files.Imagen.tempFilePath;
+            const ext = req.files.Imagen.mimetype
+            const imgName =uuid()+'.'+ext.slice(6);
+             
+        
+            const newPath = './src/uploads/'+ imgName 
+            
+            fs.rename(oldPath, newPath, (err) => {
+            if (err) {
+                console.error('Error al cambiar el nombre de la imagen:', err);
+            } else {
+                console.log('Nombre de la imagen cambiado exitosamente');
+            }
+            });
+            Imagen = 'http://localhost:3000/api/getImage/'+imgName
+        }
+        
+        const {Platillo, Descripcion, Horarios, Costos, Direccion, Calificacion} = req.body
         const [rows] = await pool.query(
-            "INSERT INTO platillos (Platillo, Descripcion, Imagen, Horarios, Costos, Direccion, Calificacion)   VALUES(?,?,?,?,?,?,?)",
+            "INSERT INTO platillos (Platillo, Descripcion, Imagen, Horarios, Costos, Direccion, Calificacion, Fecha)   VALUES(?,?,?,?,?,?,?, NOW()) ",
             [Platillo, Descripcion, Imagen, Horarios, Costos, Direccion,Calificacion]
         )
         const [plati] = await pool.query(
             "INSERT INTO Usuario_has_platillos (Usuario_idUsuario, Platillos_idPlatillos) VALUES(?,?) ",
-            [idProveedor, rows.insertId]
+            [decoded.id, rows.insertId]
         )   
         
         res.status(201).json({idPlatillo: rows.insertId, Platillo, Descripcion, Imagen, Horarios, Costos, Direccion, Calificacion})
     } catch (error) {
-        res.status(500).json({message:"Hubo un error",error})
+        res.status(500).json({message:"Hubo un error"+ error})
     }
 }
 
