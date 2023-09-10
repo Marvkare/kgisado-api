@@ -5,7 +5,7 @@ import {conf} from "../config.js"
 
 export const getUsuarios = async(req, res) =>{
     try {
-        const [rows] = await pool.query("SELECT * FROM Usuario")
+        const [rows] = await pool.query("SELECT * FROM usuario")
         if(rows.length <= 0){
             res.status(404).json({message:"No hay registros en la tabla Usuario"})
         }
@@ -18,7 +18,7 @@ export const getUsuarios = async(req, res) =>{
 export const getUsuario = async (req, res) =>{
     try {
         const {idUsuario} = req.params
-        const [rows] = await pool.query("SELECT * FROM Usuario WHERE idUsuario =?",
+        const [rows] = await pool.query("SELECT * FROM usuario WHERE idUsuario =?",
         [idUsuario])
         if(rows.length == 0){
             res.status(404).json({message: "No se encontro proveedor"})
@@ -37,7 +37,7 @@ export const agregarUsuario = async (req, res) =>{
         const ContraseñaEncriptada = await bcrypt.hash(Contrasena, salt)
         
         const [rows] = await pool.query(
-            "INSERT INTO Usuario (Nombre, Apellido, Direccion, UsuarioCol, NumTelefono, NombreUsuario, Contrasena, Rol_idRol) VALUES(?,?,?,?,?,?,?,?) ",
+            "INSERT INTO usuario (Nombre, Apellido, Direccion, UsuarioCol, NumTelefono, NombreUsuario, Contrasena, Rol_idRol) VALUES(?,?,?,?,?,?,?,?) ",
             [Nombre, Apellido, Direccion, Usuariocol, NumTelefono, NombreUsuario, ContraseñaEncriptada, parseInt(Rol_idRol)]) 
 
         const token = jwt.sign({ id: rows.insertId }, conf.secretUsuario, {
@@ -57,7 +57,7 @@ export const actualizarUsuario = async(req,res) =>{
         const {idUsuario} = req.params;
         const {Nombre, Apellido, Direccion, UsuarioCol, NumTelefono, NombreUsuario, Contrasena, Rol_idRol} = req.body;
         const [result] = await pool.query(
-            "UPDATE Usuario SET Nombre = IFNULL(?, Nombre), Apellido = IFNULL(?,Apellido), Direccion = IFNULL(?,Direccion), UsuarioCol = IFNULL(?, UsuarioCol), NumTelefono = IFNULL (?,NumTelefono), NombreUsuario = IFNULL(?,NombreUsuario), Contrasena = IFNULL(?,Contrasena), Rol_idRol = IFNULL(?,Rol_idRol) WHERE idUsuario =?",
+            "UPDATE usuario SET Nombre = IFNULL(?, Nombre), Apellido = IFNULL(?,Apellido), Direccion = IFNULL(?,Direccion), UsuarioCol = IFNULL(?, UsuarioCol), NumTelefono = IFNULL (?,NumTelefono), NombreUsuario = IFNULL(?,NombreUsuario), Contrasena = IFNULL(?,Contrasena), Rol_idRol = IFNULL(?,Rol_idRol) WHERE idUsuario =?",
             [Nombre, Apellido, Direccion, UsuarioCol, NumTelefono, NombreUsuario, Contrasena, Rol_idRol, idUsuario])
         if(result.affectedRows === 0){
             return res.status(404).json({message:"No se encontro Proveedor"})
