@@ -76,7 +76,7 @@ export const eliminarUsuario = async(req, res) =>{
     try {
         const {idUsuario} = req.params;
         const [rows] = await pool.query(
-            "DELETE FROM Usuario    WHERE idUsuario = ?",
+            "DELETE FROM usuario    WHERE idUsuario = ?",
             [idUsuario]
         )
         if(rows.affectedRows === 0){
@@ -93,7 +93,7 @@ export const inicioSesionUsuario = async(req, res)=>{
     const {NombreUsuario, Contrasena} = req.body;
     //ver si el Usuario esta en nuestra base de datos
     console.log(NombreUsuario)
-    const [row] = await pool.query("SELECT * FROM Usuario WHERE NombreUsuario = ?",
+    const [row] = await pool.query("SELECT * FROM usuario WHERE NombreUsuario = ?",
     [NombreUsuario])
     console.log(row.length)
     const userData = row[0]
