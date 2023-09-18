@@ -37,6 +37,7 @@ export const agregarPlatillo = async (req, res)=>{
     try {
         let Imagen =""
         const token  = req.headers['x-access-token']
+        console.log(token)
         const decoded = jwt.verify(token, conf.secretUsuario, (err,decoded,req)=>{
             if(err){
             return res.status(200).json(err)
@@ -44,6 +45,7 @@ export const agregarPlatillo = async (req, res)=>{
         
         return decoded
         }); 
+        console.log(req.files);
         if(await online()){
             if(req.files?.Imagen){
                 
@@ -72,17 +74,18 @@ export const agregarPlatillo = async (req, res)=>{
             });
             Imagen = 'http://localhost:3000/api/getImage/'+imgName
         }
-        
+        console.log(req.body) 
         const {Platillo, Descripcion, Horarios, Costos, Direccion, Calificacion} = req.body
         const [rows] = await pool.query(
             "INSERT INTO platillos (Platillo, Descripcion, Imagen, Horarios, Costos, Direccion, Calificacion, Fecha)   VALUES(?,?,?,?,?,?,?, NOW()) ",
             [Platillo, Descripcion, Imagen, Horarios, Costos, Direccion,Calificacion]
         )
+        console.log(rows)
         const [plati] = await pool.query(
-            "INSERT INTO Usuario_has_platillos (Usuario_idUsuario, Platillos_idPlatillos) VALUES(?,?) ",
+            "INSERT INTO usuario_has_platillos (Usuario_idUsuario, Platillos_idPlatillos) VALUES(?,?) ",
             [decoded.id, rows.insertId]
         )   
-        
+        console.log(plati)
         res.status(201).json({idPlatillo: rows.insertId, Platillo, Descripcion, Imagen, Horarios, Costos, Direccion, Calificacion})
     } catch (error) {
         res.status(500).json({message:"Hubo un error"+ error})

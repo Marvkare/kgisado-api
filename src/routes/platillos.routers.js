@@ -11,7 +11,7 @@ const router = Router()
 
 router.get("/platillos/", [ ], getPlatillos);
 router.get("/platillos/:idPlatillo",[verifyToken, esProveedor], getPlatillo);
-router.post("/platillos/", [verifyToken, esProveedor],agregarPlatillo);
+router.post("/platillos/", [verifyToken ],agregarPlatillo);
 router.patch("/platillos/:idPlatillo", [verifyToken, esProveedor] ,acutalizarPlatillo);
 router.delete("/platillos/:idPlatillo", [verifyToken, esProveedor], deletePlatillo)
 
