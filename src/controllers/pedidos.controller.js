@@ -41,8 +41,34 @@ export const pedidoProveedor= async(req, res) =>{
           const data = []
         for(let i=0; i< row.length; i++){
 
-          const [platillos] =  await pool.query("SELECT * FROM platillos WHERE idPlatillos =?",
+          const [pedidos] =  await pool.query("SELECT * FROM platillos WHERE idPlatillos =?",
           [row[i].Platillos_idPlatillos]);
+          console.log(pedidos)
+          data.push(pedidos[0])
+        }
+        res.status(200).json(data);
+
+    } catch (error) {
+      
+    }
+}
+
+export const pedidoComprador= async(req, res) =>{
+    try {
+        
+        const {miId} = req.params;
+        
+        const [row] = await pool.query(
+          "SELECT * FROM platillos_has_pedidos AS php JOIN pedidos_has_Usuario AS phu ON php.Pedidos_idPedidos = phu.pedidos_idPedidos WHERE phu.Usuario_idUsuario = ?",
+          [miId]);
+          const data = []
+        for(let i=0; i< row.length; i++){
+
+          const [platillos] =  await pool.query(
+            "SELECT  pl.platillo, pe.idPedidos FROM platillos AS pl JOIN pedidos AS pe where pl.idPlatillos =? AND pe.idPedidos = ?",
+          [row[i].Platillos_idPlatillos, row[i].pedidos_idPedidos]);
+          console.log(row[i])
+          console.log(platillos);
           data.push(platillos[0])
         }
         res.status(200).json(data);
@@ -55,7 +81,10 @@ export const pedidoProveedor= async(req, res) =>{
 export const nuevoPedido = async (req, res) => {
 
 try {
-   const {idPlatillo, CostoDeEnvio, DireccionEntrega, DescripcionDeEnvio, Tipo_de_pago_idTipo_de_pago, idComprador, PEDIDO_STATUS_idPedidoStatus} = req.body;
+   const {idPlatillo} = req.params;
+   console.log(req.body )
+   const { CostoDeEnvio, DireccionEntrega, DescripcionDeEnvio, Tipo_de_pago_idTipo_de_pago, idComprador, PEDIDO_STATUS_idPedidoStatus} = req.body;
+   console.log(CostoDeEnvio)
    "Agregar idCompradores idplatillos idRepartidorR en la tabla pedidos"
    const [rows] = await  pool.query(
     "INSERT INTO Pedidos (CostoDeEnvio, DireccionEntrega, DescripcionDeEnvio, PEDIDO_STATUS_idPedidoStatus, Tipo_de_pago_idTipo_de_pago) VALUES (?,?,?,?,?) ",
@@ -66,11 +95,12 @@ try {
     "INSERT INTO platillos_has_pedidos (Platillos_idPlatillos, Pedidos_idPedidos) VALUES (?,?)",
     [idPlatillo, rows.insertId]
    )
-   console.log("hola")
+   
    const [rows3] = await pool.query(
     "INSERT INTO  pedidos_has_Usuario (pedidos_idPedidos, Usuario_idUsuario) VALUES(?,?)",
     [rows.insertId, idComprador]
    )
+   console.log("hola")
   res.status(202).json({idPedido : rows.insertId,idPlatillo, idComprador, DescripcionDeEnvio, CostoDeEnvio })
 } catch (error) {
   res.status(500).json({message:"error"+ error})   

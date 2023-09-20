@@ -100,7 +100,6 @@ export const esProveedor = async (req, res, next) => {
         return decoded
     });  
     const [rol]  = await pool.query("SELECT * FROM Rol")
-    console.log(decoded)
     console.log(rol.length)
     for (let i = 0; i < rol.length; i++) {
       if (decoded.rol === 2 ) {

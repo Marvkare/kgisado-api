@@ -113,7 +113,7 @@ export const inicioSesionUsuario = async(req, res)=>{
     expiresIn: 60 * 60 * 24,
   });
   
-  res.status(200).json({ auth: true, token, rol: userData.Rol_idRol });
+  res.status(200).json({ auth: true, token, rol: userData.Rol_idRol,idUsuario: userData.idUsuario });
     }catch(error){
         res.status(200).json({message: error, });
     }

@@ -4,13 +4,15 @@ import {
     getPlatillo,
     agregarPlatillo,
     acutalizarPlatillo,
-    deletePlatillo
+    deletePlatillo,
+    getPlatillosProveedor
 } from "../controllers/platillos.controllers.js"
 import { verifyToken, esProveedor, esAdministrador} from "../controllers/auth/verifyToken.js";
 const router = Router()
 
 router.get("/platillos/", [ ], getPlatillos);
-router.get("/platillos/:idPlatillo",[verifyToken, esProveedor], getPlatillo);
+router.get("/platillos/:idPlatillo",[verifyToken], getPlatillo);
+router.get("/platillos/proveedor/platillos/",[verifyToken], getPlatillosProveedor);
 router.post("/platillos/", [verifyToken ],agregarPlatillo);
 router.patch("/platillos/:idPlatillo", [verifyToken, esProveedor] ,acutalizarPlatillo);
 router.delete("/platillos/:idPlatillo", [verifyToken, esProveedor], deletePlatillo)

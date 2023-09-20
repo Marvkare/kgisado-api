@@ -21,7 +21,9 @@ CREATE TABLE IF NOT EXISTS `kgisadodb`.`Usuario_has_Platillos` (
 ENGINE = InnoDB
 
 INSERT INTO rol (idRol, Nombre) VALUES(0, "Administrador"), (1, "Comprador"),(2, "Proveedor"),(3, "Repartidor");
-
+INSERT INTO tipo_de_pago (idTipo_de_pago,Nombre) VALUES (0,"efectivo");
+INSERT INTO pedido_status (idPedidoStatus,NombrePedidosStatus) VALUES (0,"Pedido echo"), (1,"Pedido aceptado por provedor"),
+(2,"Pedido listo para envio"), (3,"Pedido En camino"), (4,"Pedido llego a su destino"), (5,"Pedido pagado y haceptado");
 
 CREATE TABLE IF NOT EXISTS `kgisadodb`.`Usuario_has_Platillos`(
 
