@@ -12,9 +12,9 @@ const router = Router()
 
 router.get("/platillos/", [ ], getPlatillos);
 router.get("/platillos/:idPlatillo",[verifyToken], getPlatillo);
-router.get("/platillos/proveedor/platillos/",[verifyToken], getPlatillosProveedor);
+router.get("/platillos/proveedor/platillos/:idProveedor",[verifyToken], getPlatillosProveedor);
 router.post("/platillos/", [verifyToken ],agregarPlatillo);
-router.patch("/platillos/:idPlatillo", [verifyToken, esProveedor] ,acutalizarPlatillo);
-router.delete("/platillos/:idPlatillo", [verifyToken, esProveedor], deletePlatillo)
+router.patch("/platillos/:idPlatillo", [verifyToken] ,acutalizarPlatillo);
+router.delete("/platillos/:idPlatillo", [verifyToken], deletePlatillo)
 
 export default router;
