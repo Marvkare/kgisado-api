@@ -38,9 +38,9 @@ export const getPlatillosProveedor = async (req, res)=>{
         const [rows] = await pool.query("select * from platillos as pl join usuario_has_platillos as uhp on pl.idPlatillos = uhp.Platillos_idPlatillos WHERE uhp.Usuario_idUsuario =?",
         [idProveedor])
         if(rows.length <=0){
-            return res.status(404).json({message:"No se encontro platillo"})
+            return res.status(200).json({message:"No tienes platillos aun UwU"})
         }
-        console.log(rows)
+       // console.log(rows)
         res.json(rows)
     } catch (error) {
         return res.status(500).json({message:"Hubo un error",error})
@@ -128,14 +128,20 @@ export const acutalizarPlatillo = async (req, res) =>{
 export const deletePlatillo = async (req, res) =>{
     try {
         const {idPlatillo} = req.params;
-        const [row] = await pool.query(
-            "DELETE FROM platillos WHERE idPlatillos= ?",
-            [idPlatillo])
-        if(row.affectedRows == 0){
-            res.status(404).json({message:"No se encontro platillo"})
+        const [uhp] = await pool.query(
+            "DELETE FROM usuario_has_platillos WHERE Platillos_idPlatillos =?",
+            [idPlatillo]
+        )
+        const [rows] = await pool.query(
+            "DELETE FROM platillos WHERE idPlatillos = ?",
+            [idPlatillo]
+        )
+        if(rows.affectedRows === 0){
+            res.status(200).json({message:"No se encontro Proveeedor"})
         }
-        res.sendStatus(204)
+        res.status(200).json({message:"Platillo eliminado"   })
+
     } catch (error) {
-       res.sendStatus(500).json({message:"Algo salio mal"+error}) 
-    }
+        res.status(500).json({message:"Hubo un error :c\n"+error})
+    } 
 }

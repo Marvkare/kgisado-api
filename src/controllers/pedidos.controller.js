@@ -36,17 +36,25 @@ export const pedidoProveedor= async(req, res) =>{
         const {idProveedor} = req.params;
         
         const [row] = await pool.query(
-          "SELECT php.Platillos_idPlatillos FROM platillos_has_pedidos AS php JOIN usuario_has_platillos AS uhp ON php.Platillos_idPlatillos = uhp.Platillos_idPlatillos WHERE uhp.Usuario_idUsuario = ?",
+          "select * from pedidos as pe join platillos_has_pedidos as php on pe.idPedidos = php.Pedidos_idPedidos join usuario_has_platillos as uhp on php.Platillos_idPlatillos = uhp.Platillos_idPlatillos join platillos as p on php.Platillos_idPlatillos = p.idPlatillos where uhp.Usuario_idUsuario = ?",
           [idProveedor]);
-          const data = []
-        for(let i=0; i< row.length; i++){
+         
+        res.status(200).json(row);
 
-          const [pedidos] =  await pool.query("SELECT * FROM platillos WHERE idPlatillos =?",
-          [row[i].Platillos_idPlatillos]);
-          console.log(pedidos)
-          data.push(pedidos[0])
-        }
-        res.status(200).json(data);
+    } catch (error) {
+      
+    }
+}
+
+export const pedidoStatuA = async(req, res) =>{
+    try {
+        const {idPedido} = req.params;
+        
+        const [row] = await pool.query(
+          "UPDATE pedidos SET  PEDIDO_STATUS_idPedidoStatus = 1 WHERE idPedidos = ?",
+          [idPedido]);
+         
+        res.status(200).json(row);
 
     } catch (error) {
       

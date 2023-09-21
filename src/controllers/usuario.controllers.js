@@ -44,7 +44,7 @@ export const agregarUsuario = async (req, res) =>{
             expiresIn: 60 * 60 * 24
         })
         
-        res.status(201).json({idUsuario: rows.insertedId, Nombre, Apellido, Direccion, Usuariocol, NumTelefono, NombreUsuario, ContraseñaEncriptada, Rol_idRol, token})
+        res.status(201).json({idUsuario: rows.insertId, Nombre, Apellido, Direccion, Usuariocol, NumTelefono, NombreUsuario, ContraseñaEncriptada, Rol_idRol, token})
 
     }catch (error) {
         console.log(error)
@@ -76,7 +76,7 @@ export const eliminarUsuario = async(req, res) =>{
     try {
         const {idUsuario} = req.params;
         const [rows] = await pool.query(
-            "DELETE FROM usuario    WHERE idUsuario = ?",
+            "DELETE FROM usuario WHERE idUsuario = ?",
             [idUsuario]
         )
         if(rows.affectedRows === 0){

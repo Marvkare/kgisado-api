@@ -4,6 +4,7 @@ import { pool } from '../../db.js';
 
 export const verifyToken = async (req, res, next) => {
     const token = req.headers['x-access-token'];
+    console.log(token)
     if (!token) {
         return res.status(401).json({
             auth: false,
@@ -19,7 +20,7 @@ export const verifyToken = async (req, res, next) => {
         
         return decoded
     });
-   
+    console.log(decoded)
     next();   
     } catch (error) {
        console.log(error) 
@@ -92,7 +93,7 @@ export const esComprador = async (req, res, next) => {
 export const esProveedor = async (req, res, next) => {
   try {
     const token = req.headers['x-access-token'];
-
+    
     const decoded = jwt.verify(token, conf.secretUsuario, (err,decoded)=>{
         if(err){
             return res.status(200).json(err)
